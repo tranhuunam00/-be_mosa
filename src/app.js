@@ -1,32 +1,35 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const path = require("path");
-const indexRoute = require("./routes/index");
-const multer = require("./utils/multer");
-const fs = require("fs");
-require("dotenv").config();
-const upload = require("./services/googleDriveService");
-var bodyParser = require("body-parser");
-const session = require("express-session");
-const httpResponses = require("./utils/httpResponses");
-const keys = require("./constants/keys");
-const cookieParser = require("cookie-parser");
-const passport = require("passport");
-var cors = require("cors");
-const { createSocketIO } = require("./services/io");
+const path = require('path');
+const indexRoute = require('./routes/index');
+const multer = require('./utils/multer');
+const fs = require('fs');
+require('dotenv').config();
+const upload = require('./services/googleDriveService');
+var bodyParser = require('body-parser');
+const session = require('express-session');
+const httpResponses = require('./utils/httpResponses');
+const keys = require('./constants/keys');
+const cookieParser = require('cookie-parser');
+const passport = require('passport');
+var cors = require('cors');
+const { createSocketIO } = require('./services/io');
 app.use(cors());
-const socket = require("socket.io");
-require("./helpers/passport");
+const socket = require('socket.io');
+require('./helpers/passport');
+const redis = require('./config/redis');
+
+redis.connect();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 //datebase --mongo
-const db = require("./config/db/index");
+const db = require('./config/db/index');
 db.connect();
 //datebase --
 
 //public-folder
-app.set("trust proxy", 1); // trust first proxy
+app.set('trust proxy', 1); // trust first proxy
 app.use(cookieParser(keys.SESSION_SECRET_KEY));
 app.use(
   session({
@@ -38,18 +41,18 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header('Access-Control-Allow-Origin', '*');
   res.header(
-    "Access-Control-Allow-Headers",
-    "Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method"
+    'Access-Control-Allow-Headers',
+    'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method'
   );
-  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
-  res.header("Allow", "GET, POST, OPTIONS, PUT, DELETE");
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+  res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
   next();
 });
 
-app.use("/public", express.static(path.join(__dirname, "./public")));
-app.use("/docs", express.static(path.join(__dirname, "docs")));
+app.use('/public', express.static(path.join(__dirname, './public')));
+app.use('/docs', express.static(path.join(__dirname, 'docs')));
 app.use((req, res, next) => {
   res.badRequest = (message) => {
     return res.status(httpResponses.HTTP_STATUS_BAD_REQUEST).json({
@@ -106,42 +109,38 @@ passport.deserializeUser(function (obj, cb) {
 });
 //api
 
-app.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
+app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-app.get(
-  "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/error" }),
-  function (req, res) {
-    return res.json(req.user);
-    res.redirect("/");
-  }
-);
-app.get("/", (req, res) => {
+app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/error' }), function (req, res) {
+  return res.json(req.user);
+  res.redirect('/');
+});
+app.get('/', async (req, res) => {
+  const value = await redis.get('key');
+  console.log(value);
+  await redis.set('key', 'value');
   console.log(req.signedCookies);
-  res.cookie("name", "namdziui", {
+  res.cookie('name', 'namdziui', {
     expires: new Date(Date.now() + 900000),
     signed: true,
   });
 
-  res.sendFile(path.join(__dirname, "../public/home.html"));
+  res.sendFile(path.join(__dirname, '../public/home.html'));
 });
 
 //upload File lên google drive
 app.post(
-  "/encode",
+  '/encode',
   multer.multer.fields([
     {
-      name: "img",
+      name: 'img',
       maxCount: 4,
     },
   ]),
   async (req, res) => {
     let img;
     if (!req.files) {
-      return res.json("chuwa co file");
+      return res.json('chuwa co file');
     }
     img = req.files.img;
     const done = await upload.uploadMultiGgDrive(img);
@@ -149,7 +148,7 @@ app.post(
   }
 );
 
-const server = app.listen(process.env.PORT || 3000, () => { });
+const server = app.listen(process.env.PORT || 3000, () => {});
 
 var io = createSocketIO(server);
 app.use((req, res, next) => {
@@ -157,4 +156,4 @@ app.use((req, res, next) => {
 
   next();
 });
-app.use("/api", indexRoute);
+app.use('/api', indexRoute);
