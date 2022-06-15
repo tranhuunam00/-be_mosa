@@ -114,9 +114,7 @@ app.get('/auth/google/callback', passport.authenticate('google', { failureRedire
   res.redirect('/');
 });
 app.get('/', async (req, res) => {
-  const value = await redis.get('key');
-  console.log(value);
-  await redis.set('key', 'value');
+ 
   console.log(req.signedCookies);
   res.cookie('name', 'namdziui', {
     expires: new Date(Date.now() + 900000),
