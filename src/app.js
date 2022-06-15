@@ -17,9 +17,7 @@ const { createSocketIO } = require('./services/io');
 app.use(cors());
 const socket = require('socket.io');
 require('./helpers/passport');
-const redis = require('./config/redis');
 
-redis.connect();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
