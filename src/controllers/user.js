@@ -246,10 +246,6 @@ const register = async (req, res) => {
           await customerService.deleteCustomer({ user: existedUser._id });
           break;
         }
-        case enums.UserRole.SALLER: {
-          await sallerService.deleteSaller({ user: existedUser._id });
-          break;
-        }
       }
       logger.debug(`[createUser] delete old`);
     }
@@ -270,10 +266,7 @@ const register = async (req, res) => {
         logger.debug(`[createUser] createCustomer ${httpResponses.SUCCESS}`);
 
         break;
-      case enums.UserRole.SALLER:
-        await sallerService.createSaller(newModel);
-        logger.debug(`[createUser] createSaller ${httpResponses.SUCCESS}`);
-        break;
+    
       default:
       // code block
     }

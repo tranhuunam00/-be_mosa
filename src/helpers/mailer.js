@@ -6,6 +6,7 @@ const { MAILER } = require("../constants/constants");
 
 const sendGmail = async (mail) => {
   try {
+   
     sendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
 
     const response = await sendGridMail.send(mail);

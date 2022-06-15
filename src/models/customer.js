@@ -31,6 +31,7 @@ const customerSchema = mongoose.Schema(
       type: String,
       default: constants.COVER_DEFAULT,
     },
+    phoneNumber:String
   },
   { timestamps: true }
 );
