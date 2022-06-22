@@ -18,6 +18,7 @@ const customerService = require('../services/customer');
 
 const googleDriveService = require('./../services/googleDriveService');
 const tokenService = require('./../services/token');
+const helpers = require('../helpers/help');
 //
 const getAllUsers = async (req, res) => {
   try {
@@ -222,18 +223,27 @@ const register = async (req, res) => {
       logger.debug(`[register] error - >${httpResponses.EMAIL_NOT_FOUND}`);
       return res.notFound(httpResponses.EMAIL_NOT_FOUND);
     }
+
     if (!newModel.password) {
       logger.debug(`[register] error - >${httpResponses.PASSWORD_NOT_FOUND}`);
       return res.notFound(httpResponses.PASSWORD_NOT_FOUND);
     }
+
     if (!newModel.firstName || !newModel.lastName || !newModel.dob || !newModel.gender) {
       logger.debug(`[register] error - >${httpResponses.QUERY_INVALID}`);
       return res.notFound(httpResponses.QUERY_INVALID);
     }
+
+    if (!helpers.checkDate(newModel.dob)) {
+      logger.debug(`[register] dob - >${httpResponses.QUERY_INVALID}`);
+      return res.notFound(httpResponses.QUERY_INVALID);
+    }
+
     console.log('oki');
     const existedUser = await userService.getUserByFilter({
       email: newModel.email,
     });
+
     if (existedUser && existedUser.isConfirm) {
       logger.debug(`[register] error - >${httpResponses.USER_EXISTED}`);
 
@@ -266,7 +276,7 @@ const register = async (req, res) => {
         logger.debug(`[createUser] createCustomer ${httpResponses.SUCCESS}`);
 
         break;
-    
+
       default:
       // code block
     }

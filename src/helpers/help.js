@@ -1,10 +1,20 @@
-const enums = require("../constants/enum");
+const enums = require('../constants/enum');
 function isVietnamesePhoneNumber(number) {
+  console.log(number);
   return /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/.test(number);
 }
 
 const randomNumber = (max) => {
   return Math.floor(Math.random() * 10000);
+};
+
+const checkDate = (date) => {
+  const arrDate = date.split('-');
+  console.log(arrDate);
+  if (arrDate.length !== 3) return false;
+  if (arrDate[0].length !== 4) return false;
+  if (arrDate[1].length !== 2 || arrDate[2].length !== 2) return false;
+  return true;
 };
 
 const rankStatusOrder = () => {
@@ -29,4 +39,4 @@ const rankStatusOrder = () => {
   });
   return number;
 };
-module.exports = { isVietnamesePhoneNumber, randomNumber, rankStatusOrder };
+module.exports = { isVietnamesePhoneNumber, randomNumber, rankStatusOrder, checkDate };
