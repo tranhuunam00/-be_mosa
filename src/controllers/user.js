@@ -209,46 +209,27 @@ const exportByHtml = async (req, res) => {
 const register = async (req, res) => {
   try {
     const newModel = req.body;
-    console.log(newModel);
+
     if (!newModel.role) {
       newModel.role = enums.UserRole.CUSTOMER;
     }
-    logger.debug(`[register] running`);
+
     let avatar;
     if (req.files && req.files.avatar && req.files.avatar.length > 0) {
       avatar = req.files.avatar[0];
     }
+
     logger.info(`[register] body -> ${JSON.stringify(newModel)}`);
-    if (!newModel.email) {
-      logger.debug(`[register] error - >${httpResponses.EMAIL_NOT_FOUND}`);
-      return res.notFound(httpResponses.EMAIL_NOT_FOUND);
-    }
 
-    if (!newModel.password) {
-      logger.debug(`[register] error - >${httpResponses.PASSWORD_NOT_FOUND}`);
-      return res.notFound(httpResponses.PASSWORD_NOT_FOUND);
-    }
-
-    if (!newModel.firstName || !newModel.lastName || !newModel.dob || !newModel.gender) {
-      logger.debug(`[register] error - >${httpResponses.QUERY_INVALID}`);
-      return res.notFound(httpResponses.QUERY_INVALID);
-    }
-
-    if (!helpers.checkDate(newModel.dob)) {
-      logger.debug(`[register] dob - >${httpResponses.QUERY_INVALID}`);
-      return res.notFound(httpResponses.QUERY_INVALID);
-    }
-
-    console.log('oki');
     const existedUser = await userService.getUserByFilter({
       email: newModel.email,
     });
 
     if (existedUser && existedUser.isConfirm) {
       logger.debug(`[register] error - >${httpResponses.USER_EXISTED}`);
-
       return res.badRequest(httpResponses.USER_EXISTED);
     }
+
     if (existedUser) {
       switch (existedUser.role) {
         case enums.UserRole.CUSTOMER: {

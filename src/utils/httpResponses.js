@@ -30,8 +30,9 @@ module.exports.USER_NOT_CONFIRM = 'USER_NOT_CONFIRM';
 //customer
 module.exports.CART_NOT_FOUND = 'CART_NOT_FOUND';
 module.exports.CART_EXISTED = 'CART_EXISTED';
-
 module.exports.CUSTOMER_NOT_FOUND = 'CUSTOMER_NOT_FOUND';
+module.exports.MAIN_CUSTOMER = 'MAIN_CUSTOMER';
+module.exports.NOT_MAIN_CUSTOMER = 'NOT_MAIN_CUSTOMER';
 
 //user
 module.exports.USER_NOT_FOUND = 'User_not_found';

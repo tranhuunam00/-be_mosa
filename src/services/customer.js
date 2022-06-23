@@ -1,6 +1,6 @@
-const Customer = require("../models/customer");
-const { lookup, unwind } = require("../utils/utility");
-const mongoose = require("mongoose");
+const Customer = require('../models/customer');
+const { lookup, unwind } = require('../utils/utility');
+const mongoose = require('mongoose');
 
 const getAllCustomersByFilter = async (filter) => {
   return await Customer.find(filter);
@@ -24,8 +24,8 @@ const getDetailsCustomer = async (customerId) => {
     {
       $match: { _id: mongoose.Types.ObjectId(customerId) },
     },
-    lookup("users", "user", "_id", "user"),
-    unwind("$user", true),
+    lookup('users', 'user', '_id', 'user'),
+    unwind('$user', true),
   ]);
   const res = docs && docs.length > 0 ? docs[0] : null;
   console.log(res);
@@ -37,8 +37,8 @@ const getProfile = async (userId) => {
     {
       $match: { user: mongoose.Types.ObjectId(userId) },
     },
-    lookup("users", "user", "_id", "user"),
-    unwind("$user", true),
+    lookup('users', 'user', '_id', 'user'),
+    unwind('$user', true),
   ]);
   const res = docs && docs.length > 0 ? docs[0] : null;
   console.log(res);
@@ -49,6 +49,10 @@ const deleteCustomer = async (filter) => {
   return await Customer.deleteOne(filter);
 };
 
+const deleteSoftCustomer = async (filter) => {
+  return await Customer.updateOne(filter, { isDelete: true });
+};
+
 module.exports = {
   getAllCustomersByFilter,
   createCustomer,
@@ -56,6 +60,6 @@ module.exports = {
   getDetailsCustomer,
   getProfile,
   updateCustomerByFilter,
-
+  deleteSoftCustomer,
   deleteCustomer,
 };

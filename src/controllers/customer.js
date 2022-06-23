@@ -61,8 +61,53 @@ const getProfile = async (req, res) => {
   }
 };
 
+const createOtherCustomer = async (req, res) => {
+  try {
+    const { user } = req.session;
+    console.log(user);
+    const newModel = req.body;
+    newModel.user = user._id;
+    logger.debug(`[createOtherCustomer]`);
+    x``;
+    newModel.other = true;
+    const customer = await customerService.createCustomer(newModel);
+    res.created(httpResponses.SUCCESS, customer);
+  } catch (e) {
+    logger.error(`[createOtherCustomer]`);
+    return res.internalServer(e.message);
+  }
+};
+
+/**
+ * delete customer
+ */
+const deleteCustomerOther = async (req, res) => {
+  try {
+    const { user, customer } = req.session;
+    const { id } = req.query;
+    if (customer.other) {
+      return res.badRequest(httpResponses.NOT_MAIN_CUSTOMER);
+    }
+
+    const deleteCustomer = await customerService.getOneCustomerByFilter({ _id: id });
+
+    if (!deleteCustomer || !deleteCustomer.other || user._id != deleteCustomer.user) {
+      return res.notFound(httpResponses.CUSTOMER_NOT_FOUND);
+    }
+
+    await customerService.deleteSoftCustomer({ _id: deleteCustomer._id });
+
+    res.ok(httpResponses.SUCCESS);
+  } catch (err) {
+    logger.error(`[deleteCustomerOther] error -> ${err.message}`);
+    res.internalServer(err.message);
+  }
+};
+
 module.exports = {
   getAllCustomer,
   getDetailsCustomer,
   getProfile,
+  createOtherCustomer,
+  deleteCustomerOther,
 };

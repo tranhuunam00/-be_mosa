@@ -1,13 +1,13 @@
-const mongoose = require("mongoose");
-const enums = require("../constants/enum");
-const constants = require("../constants/constants");
+const mongoose = require('mongoose');
+const enums = require('../constants/enum');
+const constants = require('../constants/constants');
 // constants
 
 const customerSchema = mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
+      ref: 'users',
       required: true,
     },
     firstName: {
@@ -31,9 +31,17 @@ const customerSchema = mongoose.Schema(
       type: String,
       default: constants.COVER_DEFAULT,
     },
-    phoneNumber:String
+    phoneNumber: String,
+    other: {
+      type: Boolean,
+      default: false,
+    },
+    isDelete: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("customers", customerSchema);
+module.exports = mongoose.model('customers', customerSchema);
