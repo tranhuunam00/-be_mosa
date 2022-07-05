@@ -13,13 +13,7 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    // push: [
-    //   {
-    //     token: String,
-    //     deviceId: String,
-    //     os: String,
-    //   },
-    // ],
+
     role: {
       type: String,
       enum: UserRole,

@@ -28,4 +28,19 @@ const createCustomerValidate = (req, res, next) => {
   next();
 };
 
-module.exports = { createCustomerValidate };
+const createStopBangValidate = (req, res, next) => {
+  const { snoring, tired, observed, height, pressure, weight, necksize } = req.body;
+  if (!snoring || !tired || !observed || !height || !pressure || !weight || !necksize) {
+    return res.notFound(httpResponses.QUERY_INVALID);
+  }
+  if (snoring != 'true' && snoring != 'false') return res.notFound(`snoring_Invalid`);
+  if (tired != 'true' && tired != 'false') return res.notFound(`tired_Invalid`);
+  if (observed != 'true' && observed != 'false') return res.notFound(`observed_Invalid`);
+  if (pressure != 'true' && pressure != 'false') return res.notFound(`pressure_Invalid`);
+  if (necksize != 'true' && necksize != 'false') return res.notFound(`necksize_Invalid`);
+  if (+height == NaN) return res.notFound(`height_Invalid`);
+  if (+weight == NaN) return res.notFound(`weight_Invalid`);
+  next();
+};
+
+module.exports = { createCustomerValidate, createStopBangValidate };

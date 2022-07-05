@@ -104,10 +104,37 @@ const deleteCustomerOther = async (req, res) => {
   }
 };
 
+/*
+  create stopbang
+*/
+
+const createStopBang = async (req, res) => {
+  try {
+    logger.debug(`[createStopBang]`);
+    let { snoring, tired, observed, height, pressure, weight, necksize } = req.body;
+
+    await customerService.createStopBang({
+      snoring: snoring == 'true',
+      tired: tired == 'true',
+      observed: observed == 'true',
+      height: +height,
+      pressure: pressure == 'true',
+      weight: +weight,
+      necksize: necksize == 'true',
+    });
+    console.log('create ok');
+    return res.created(httpResponses.SUCCESS);
+  } catch (err) {
+    console.log(err);
+    res.internalServer(err.message);
+  }
+};
+
 module.exports = {
   getAllCustomer,
   getDetailsCustomer,
   getProfile,
   createOtherCustomer,
   deleteCustomerOther,
+  createStopBang,
 };

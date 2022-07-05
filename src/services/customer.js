@@ -1,4 +1,5 @@
 const Customer = require('../models/customer');
+const StopBang = require('../models/stopbang');
 const { lookup, unwind } = require('../utils/utility');
 const mongoose = require('mongoose');
 
@@ -53,6 +54,11 @@ const deleteSoftCustomer = async (filter) => {
   return await Customer.updateOne(filter, { isDelete: true });
 };
 
+const createStopBang = async (data) => {
+  const newStopBang = new StopBang(data);
+  return await newStopBang.save();
+};
+
 module.exports = {
   getAllCustomersByFilter,
   createCustomer,
@@ -62,4 +68,5 @@ module.exports = {
   updateCustomerByFilter,
   deleteSoftCustomer,
   deleteCustomer,
+  createStopBang,
 };

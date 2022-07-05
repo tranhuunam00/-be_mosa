@@ -23,6 +23,13 @@ customerRoute.post(
   customerController.createOtherCustomer
 );
 
+customerRoute.post(
+  '/stopbang',
+  requireLogin,
+  customerValidator.createStopBangValidate,
+  customerController.createStopBang
+);
+
 customerRoute.get('/profile', requireLogin, customerController.getProfile);
 
 customerRoute.get('/:_id', customerController.getDetailsCustomer);

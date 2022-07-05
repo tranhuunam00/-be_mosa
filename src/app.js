@@ -18,7 +18,6 @@ app.use(cors());
 const socket = require('socket.io');
 require('./helpers/passport');
 
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 //datebase --mongo
@@ -114,7 +113,6 @@ app.get('/auth/google/callback', passport.authenticate('google', { failureRedire
   res.redirect('/');
 });
 app.get('/', async (req, res) => {
- 
   console.log(req.signedCookies);
   res.cookie('name', 'namdziui', {
     expires: new Date(Date.now() + 900000),
@@ -144,7 +142,7 @@ app.post(
   }
 );
 
-const server = app.listen(process.env.PORT || 5004, () => {});
+const server = app.listen(process.env.PORT || 5003, () => {});
 
 var io = createSocketIO(server);
 app.use((req, res, next) => {
