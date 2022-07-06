@@ -36,7 +36,11 @@ const getDetailsCustomer = async (req, res) => {
     const { _id } = req.params;
     logger.info(`[getDetailsCustomer]  Id  -> ${_id}`);
     const customer = await customerService.getDetailsCustomer(_id);
+
+    if (!customer) return res.badRequest(httpResponses.CUSTOMER_NOT_FOUND);
+
     logger.debug(`[getDetailsCustomer] ${httpResponses.SUCCESS}`);
+
     res.ok(httpResponses.SUCCESS, customer);
   } catch (e) {
     logger.error(`[getDetailsCustomer]`);
@@ -68,7 +72,6 @@ const createOtherCustomer = async (req, res) => {
     const newModel = req.body;
     newModel.user = user._id;
     logger.debug(`[createOtherCustomer]`);
-    x``;
     newModel.other = true;
     const customer = await customerService.createCustomer(newModel);
     res.created(httpResponses.SUCCESS, customer);
@@ -111,7 +114,13 @@ const deleteCustomerOther = async (req, res) => {
 const createStopBang = async (req, res) => {
   try {
     logger.debug(`[createStopBang]`);
-    let { snoring, tired, observed, height, pressure, weight, necksize } = req.body;
+
+    const { user } = req.session;
+    let { snoring, tired, observed, height, pressure, weight, necksize, customer } = req.body;
+
+    const customerExist = await customerService.getOneCustomerByFilter({ user: user._id, _id: customer });
+
+    if (!customerExist) return res.badRequest(httpResponses.CUSTOMER_NOT_FOUND);
 
     await customerService.createStopBang({
       snoring: snoring == 'true',
@@ -121,8 +130,10 @@ const createStopBang = async (req, res) => {
       pressure: pressure == 'true',
       weight: +weight,
       necksize: necksize == 'true',
+      customer,
     });
     console.log('create ok');
+
     return res.created(httpResponses.SUCCESS);
   } catch (err) {
     console.log(err);

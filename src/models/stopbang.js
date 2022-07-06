@@ -4,6 +4,11 @@ const mongoose = require('mongoose');
 
 const stopbangSchema = mongoose.Schema(
   {
+    customer: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'customers',
+      required: true,
+    },
     snoring: {
       type: Boolean,
       required: true,

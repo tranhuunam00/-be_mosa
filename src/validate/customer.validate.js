@@ -29,8 +29,8 @@ const createCustomerValidate = (req, res, next) => {
 };
 
 const createStopBangValidate = (req, res, next) => {
-  const { snoring, tired, observed, height, pressure, weight, necksize } = req.body;
-  if (!snoring || !tired || !observed || !height || !pressure || !weight || !necksize) {
+  const { snoring, tired, observed, height, pressure, weight, necksize, customer } = req.body;
+  if (!snoring || !tired || !observed || !height || !pressure || !weight || !necksize || !customer) {
     return res.notFound(httpResponses.QUERY_INVALID);
   }
   if (snoring != 'true' && snoring != 'false') return res.notFound(`snoring_Invalid`);

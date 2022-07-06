@@ -23,13 +23,13 @@ const updateCustomerByFilter = async (filter, newModel) => {
 const getDetailsCustomer = async (customerId) => {
   const docs = await Customer.aggregate([
     {
-      $match: { _id: mongoose.Types.ObjectId(customerId) },
+      $match: { _id: mongoose.Types.ObjectId(customerId), isDelete: { $ne: true } },
     },
     lookup('users', 'user', '_id', 'user'),
     unwind('$user', true),
+    lookup('stopbangs', '_id', 'customer', 'stopbang'),
   ]);
   const res = docs && docs.length > 0 ? docs[0] : null;
-  console.log(res);
   return res;
 };
 
