@@ -7,7 +7,7 @@ const sensorSchema = mongoose.Schema({
   customer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'customers',
-    required: false,
+    required: true,
   },
   name: {
     type: String,
