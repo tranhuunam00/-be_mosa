@@ -1,5 +1,5 @@
-const Sensor = require("../models/sensor")
-const createSensors =async(data)=>{
-    return await Sensor.insertMany(data)
-}
-
+const Sensor = require('../models/sensor');
+const createSensors = async (data) => {
+  return await Sensor.insertMany(data);
+};
+module.exports = { createSensors };
