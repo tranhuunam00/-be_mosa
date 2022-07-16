@@ -66,3 +66,5 @@ module.exports.FILTER_DEFAULT_ALL_PRODUCT = {
 };
 
 module.exports.TRANSACTION_ID_MOMO_DEFAULT = 'NOT_TRANSACTION_ID';
+module.exports.HEADER_SENSOR_EXPORT = ['value', 'createdAt'];
+module.exports.HEADER_ACCELEROMETER_EXPORT = ['x', 'y', 'z', 'createdAt', 'customer'];
