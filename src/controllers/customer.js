@@ -149,11 +149,11 @@ const getStopBang = async (req, res) => {
   try {
     logger.debug(`[getStopBang]`);
 
-    const { user,customer } = req.session;
+    const { user, customer } = req.session;
     console.log(customer);
-    const stopbang = await customerService.getStopbang(customer._id)
-   
-    return res.ok(httpResponses.SUCCESS,stopbang);
+    const stopbang = await customerService.getStopbang(customer._id);
+
+    return res.ok(httpResponses.SUCCESS, { stopbang });
   } catch (err) {
     console.log(err);
     res.internalServer(err.message);
@@ -166,5 +166,5 @@ module.exports = {
   createOtherCustomer,
   deleteCustomerOther,
   createStopBang,
-  getStopBang
+  getStopBang,
 };
