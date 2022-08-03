@@ -32,7 +32,7 @@ customerRoute.post(
 
 customerRoute.get('/profile', requireLogin, customerController.getProfile);
 
-customerRoute.get('/stopbang', requireLogin, checkPermissions(enums.UserRole.CUSTOMER), customerController.getStopBang);
+customerRoute.get('/stopbang/:id', requireLogin, customerController.getStopBang);
 
 customerRoute.get('/other', requireLogin, customerController.getUserOther);
 
