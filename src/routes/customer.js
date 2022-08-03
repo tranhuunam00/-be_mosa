@@ -34,12 +34,11 @@ customerRoute.get('/profile', requireLogin, customerController.getProfile);
 
 customerRoute.get('/stopbang', requireLogin, checkPermissions(enums.UserRole.CUSTOMER), customerController.getStopBang);
 
+customerRoute.get('/other', requireLogin, customerController.getUserOther);
+
 customerRoute.get('/:_id', customerController.getDetailsCustomer);
 
 customerRoute.get('/', requireLogin, checkPermissions(enums.UserRole.CUSTOMER), customerController.getAllCustomer);
-
-
-
 
 customerRoute.delete(
   '/other',

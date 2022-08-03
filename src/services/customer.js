@@ -59,9 +59,13 @@ const createStopBang = async (data) => {
   return await newStopBang.save();
 };
 
-const getStopbang= async (idCustomer)=>{
-  return await StopBang.find({customer:idCustomer})
-}
+const getStopbang = async (idCustomer) => {
+  return await StopBang.find({ customer: idCustomer });
+};
+
+const getListCustomerByUser = async (idUser) => {
+  return await Customer.find({ user: idUser });
+};
 
 module.exports = {
   getAllCustomersByFilter,
@@ -73,5 +77,6 @@ module.exports = {
   deleteSoftCustomer,
   deleteCustomer,
   createStopBang,
-  getStopbang
+  getStopbang,
+  getListCustomerByUser,
 };

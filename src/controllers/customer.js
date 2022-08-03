@@ -150,12 +150,31 @@ const getStopBang = async (req, res) => {
     logger.debug(`[getStopBang]`);
 
     const { user, customer } = req.session;
-    console.log(customer);
+
     const stopbang = await customerService.getStopbang(customer._id);
 
     return res.ok(httpResponses.SUCCESS, { stopbang });
   } catch (err) {
-    console.log(err);
+    res.internalServer(err.message);
+  }
+};
+
+/*
+  get list user other
+*/
+
+const getUserOther = async (req, res) => {
+  try {
+    logger.debug(`[getUserOther]`);
+
+    const { user } = req.session;
+
+    const listCustomer = await customerService.getListCustomerByUser(user._id);
+
+    logger.debug(`[getUserOther] ${httpResponses.SUCCESS}`);
+    
+    return res.ok(httpResponses.SUCCESS, { listCustomer });
+  } catch (err) {
     res.internalServer(err.message);
   }
 };
@@ -167,4 +186,5 @@ module.exports = {
   deleteCustomerOther,
   createStopBang,
   getStopBang,
+  getUserOther,
 };
