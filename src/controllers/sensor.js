@@ -32,14 +32,16 @@ const exportFileSensorData = async (req, res) => {
   try {
     const sensors = await sensorService.getAllSensors();
     console.log(sensors[100]);
-    const data = [constants.HEADER_SENSOR_EXPORT];
+    const data = [constants.HEADER_ACCELEROMETER_EXPORT];
     sensors.forEach((item) => {
-      data.push([item.value, item.time]);
+      const [x, y, z] = item.value.split('%');
+
+      data.push([x, y, z, item.time, 0]);
     });
 
     var buffer = xlsx.build([{ name: 'mySheetName', data: data }]);
 
-    const fileName = 'hello_world.csv';
+    const fileName = 'accelerometer.csv';
 
     res.writeHead(200, {
       'Content-Disposition': `attachment; filename="${fileName}"`,
