@@ -9,7 +9,8 @@ const enums = require('../constants/enum');
 
 sensorRoute.post('/create_accelerometer', sensorValidate.createSensorValidate, sensorController.createSensors);
 
-sensorRoute.post('/create_accelerometer', sensorValidate.createSensorValidate, sensorController.createSensors);
 sensorRoute.get('/export', sensorController.exportFileSensorData);
+
+sensorRoute.delete('/all', sensorController.deleteAllData);
 
 module.exports = sensorRoute;

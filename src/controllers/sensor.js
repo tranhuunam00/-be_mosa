@@ -54,4 +54,16 @@ const exportFileSensorData = async (req, res) => {
     return res.internalServer(e.message);
   }
 };
-module.exports = { createSensors, exportFileSensorData };
+
+const deleteAllData = async (req, res) => {
+  try {
+    logger.debug(`[deleteALlData]`);
+    await sensorService.deleteAllSensors();
+    res.ok(httpResponses.SUCCESS);
+  } catch (e) {
+    logger.error(e.message);
+    return res.internalServer(e.message);
+  }
+};
+
+module.exports = { createSensors, exportFileSensorData, deleteAllData };
