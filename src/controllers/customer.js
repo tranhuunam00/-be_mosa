@@ -149,13 +149,46 @@ const getStopBang = async (req, res) => {
   try {
     logger.debug(`[getStopBang]`);
 
-    const { user, customer } = req.session;
-    console.log(customer);
-    const stopbang = await customerService.getStopbang(customer._id);
+    const { user } = req.session;
+
+    const idCustomer = req.params.id;
+
+    const customerExist = await customerService.getOneCustomerByFilter({ _id: idCustomer });
+
+    if (!customerExist) {
+      logger.debug(httpResponses.CUSTOMER_NOT_FOUND);
+    return  res.notFound(httpResponses.CUSTOMER_NOT_FOUND);
+    }
+
+    if (customerExist.user.toString() !== user._id.toString()) {
+      logger.debug(httpResponses.USER_NOT_FOUND);
+      return  res.notFound(httpResponses.USER_NOT_FOUND);
+    }
+
+    const stopbang = await customerService.getStopbang(idCustomer);
 
     return res.ok(httpResponses.SUCCESS, { stopbang });
   } catch (err) {
-    console.log(err);
+    res.internalServer(err.message);
+  }
+};
+
+/*
+  get list user other
+*/
+
+const getUserOther = async (req, res) => {
+  try {
+    logger.debug(`[getUserOther]`);
+
+    const { user } = req.session;
+
+    const listCustomer = await customerService.getListCustomerByUser(user._id);
+
+    logger.debug(`[getUserOther] ${httpResponses.SUCCESS}`);
+
+    return res.ok(httpResponses.SUCCESS, { listCustomer });
+  } catch (err) {
     res.internalServer(err.message);
   }
 };
@@ -167,4 +200,5 @@ module.exports = {
   deleteCustomerOther,
   createStopBang,
   getStopBang,
+  getUserOther,
 };
