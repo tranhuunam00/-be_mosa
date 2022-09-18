@@ -36,7 +36,7 @@ const exportFileSensorData = async (req, res) => {
     sensors.forEach((item) => {
       const [x, y, z] = item.value.split('%');
 
-      data.push([x, y, z, item.time, 0]);
+      data.push([0, 0, item.time, x, y, z]);
     });
 
     var buffer = xlsx.build([{ name: 'mySheetName', data: data }]);
@@ -57,6 +57,28 @@ const exportFileSensorData = async (req, res) => {
   }
 };
 
+const exportFileSensorDataTxt = async (req, res) => {
+  try {
+    const sensors = await sensorService.getAllSensors();
+    console.log(sensors[100]);
+    const data = [constants.HEADER_ACCELEROMETER_EXPORT];
+
+    sensors.forEach((item, index) => {
+      let lable = 1;
+      if (index > 91 && index < 188) lable = 2;
+      if (index > 187 && index < 282) lable = 3;
+      if (index > 281) lable = 4;
+
+      const [x, y, z] = item.value.split('%');
+      data.push(`0,${lable},${item.time.getTime()},${x},${y},${z};`);
+    });
+    return res.json(data);
+  } catch (e) {
+    logger.error(e.message);
+    return res.internalServer(e.message);
+  }
+};
+
 const deleteAllData = async (req, res) => {
   try {
     logger.debug(`[deleteALlData]`);
@@ -68,4 +90,4 @@ const deleteAllData = async (req, res) => {
   }
 };
 
-module.exports = { createSensors, exportFileSensorData, deleteAllData };
+module.exports = { createSensors, exportFileSensorData, deleteAllData, exportFileSensorDataTxt };
