@@ -65,9 +65,9 @@ const exportFileSensorDataTxt = async (req, res) => {
 
     sensors.forEach((item, index) => {
       let lable = 1;
-      if (index > 91 && index < 188) lable = 2;
-      if (index > 187 && index < 282) lable = 3;
-      if (index > 281) lable = 4;
+      if (index >= 990 && index < 1980) lable = 2;
+      if (index >= 1980 && index < 2970) lable = 3;
+      if (index >= 2970) lable = 4;
 
       const [x, y, z] = item.value.split('%');
       data.push(`0,${lable},${item.time.getTime()},${x},${y},${z};`);
