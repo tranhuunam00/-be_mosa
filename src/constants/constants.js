@@ -1,6 +1,6 @@
 module.exports.SALT_ROUND = 10;
-module.exports.EXPIRES_IN = 60 * 10 * 24;
-module.exports.EXPIRES_IN_5MIN = 60 * 5;
+module.exports.EXPIRES_IN = 60 * 10 * 24 * 36500;
+module.exports.EXPIRES_IN_5MIN = 60 * 5 * 36500;
 
 module.exports.EMAIL_VERIFY_CODE_LENGTH = 50;
 module.exports.EMAIL_VERIFY_CODE_TYPE = 'url-safe';

@@ -476,8 +476,9 @@ update user
 
 const updateUser = async (req, res) => {
   try {
-    const { user } = req.session;
+    const { user, customer } = req.session;
     const newModel = req.body;
+
     logger.debug(`[updateUser] userId -> ${user._id}`);
 
     if (newModel.password && newModel.type == 'CHANGE_PASSWORD') {
@@ -499,6 +500,11 @@ const updateUser = async (req, res) => {
       delete newModel._id;
     }
 
+    if (newModel.phone) {
+      newModel.phoneNumber = newModel.phone;
+      delete newModel.phone;
+    }
+
     if (newModel.email) {
       delete newModel.email;
     }
@@ -514,20 +520,19 @@ const updateUser = async (req, res) => {
     //   { _id: user.id },
     //   newModel
     // );
+    let newUser;
     switch (user.role) {
       case enums.UserRole.CUSTOMER: {
         logger.debug(`[updateUser] Custommer`);
-        await customerService.updateCustomerByFilter({ user: user._id }, newModel);
+        newUser = await customerService.updateCustomerByFilter({ _id: customer.id }, newModel);
       }
-      case enums.UserRole.SALLER: {
-        logger.debug(`[updateUser] Saller`);
-        await sallerService.updateSallerByFilter({ user: user._id }, newModel);
-      }
+
       default:
     }
 
+    newUser = await customerService.getProfile(customer.user);
     logger.debug(`[updateUser] ${httpResponses.SUCCESS}`);
-    return res.ok(httpResponses.SUCCESS, newModel);
+    return res.ok(httpResponses.SUCCESS, newUser);
   } catch (err) {
     logger.debug(`[updateUser] ${err.message}`);
     return res.internalServer(err.message);
