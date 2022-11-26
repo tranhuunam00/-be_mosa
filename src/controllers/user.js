@@ -19,6 +19,7 @@ const customerService = require('../services/customer');
 const googleDriveService = require('./../services/googleDriveService');
 const tokenService = require('./../services/token');
 const helpers = require('../helpers/help');
+const { sendMail, mailOptions } = require('../services/mail');
 //
 const getAllUsers = async (req, res) => {
   try {
@@ -46,26 +47,6 @@ const getAllUsersExportPdf = async (req, res) => {
   } catch (err) {
     logger.error(err.message);
     return res.internalServer(err.message);
-  }
-};
-
-const sendMail = async (req, res) => {
-  try {
-    const { subject, body } = req.body;
-    console.log(subject);
-    const template = templateHelper.sendMailForTutor('nam oi', 'that la hay hay hay', '18020938@vnu.edu.vn');
-    await mailerHelper.sendGmail(template);
-
-    return res.status(httpResponses.HTTP_STATUS_OK).json({
-      success: true,
-      message: `${httpResponses.SEND_MAIL_SUCCESS}`,
-    });
-  } catch (err) {
-    logger.error(`[sendMailForTutor] error -> ${err.message}`);
-    res.status(httpResponses.HTTP_STATUS_INTERNAL_ERROR).json({
-      success: false,
-      message: `${err.message}`,
-    });
   }
 };
 
@@ -267,6 +248,10 @@ const register = async (req, res) => {
       type: 'register',
     });
     const template = templateHelper.sendMailCreateUser(token, newModel.email);
+
+    console.log(template);
+
+    await sendMail(mailOptions(template.to, template.subject, template.text, template.html));
     const { success } = await mailerHelper.sendGmail(template);
     if (!success) {
       logger.debug(`[register] error - >${httpResponses.SEND_MAIL_ERROR}`);

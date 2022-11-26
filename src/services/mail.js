@@ -1,19 +1,19 @@
-const nodemailer = require("nodemailer");
-require("dotenv").config();
-const logger = require("../utils/logger");
+const nodemailer = require('nodemailer');
+require('dotenv').config();
+const logger = require('../utils/logger');
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  service: 'gmail',
   auth: {
-    user: process.env.MAIL_NAME || "greenifymail@gmail.com", //Tài khoản gmail
-    pass: process.env.MAIL_PASSWORD || "greenify123", //Mật khẩu gmail
+    user: 'tranhuunam23022000@gmail.com', //Tài khoản gmail
+    pass: 'psjtpkecqmwptiqv', //Mật khẩu gmail
   },
   tls: {
     rejectUnauthorized: false,
   },
 });
 
-let contentHTML = "";
+let contentHTML = '';
 contentHTML += `
   <div style="padding: 10px; background-color: #003375">
       <div style="padding: 10px; background-color: white;">
@@ -23,13 +23,13 @@ contentHTML += `
   </div>
 `;
 
-const mailOptions = (email, label, content) => {
+const mailOptions = (email, label, content, template) => {
   return {
     from: process.env.MAIL_NAME,
     to: email,
     subject: label,
     text: content,
-    // html: contentHTML
+    html: template,
   };
 };
 
