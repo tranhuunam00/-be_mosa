@@ -5,13 +5,10 @@ const createSensorValidate = async (req, res, next) => {
   try {
     const { customer, value } = req.body;
     if (!value) {
-      res.badRequest(httpResponses.QUERY_INVALID);
+      return res.badRequest(httpResponses.QUERY_INVALID);
     }
-    if (customer) {
-      const existCustomer = await customerService.getOneCustomerByFilter({ _id: customer });
-      if (!existCustomer) {
-        res.notFound(httpResponses.CUSTOMER_NOT_FOUND);
-      }
+    if (!customer) {
+      return res.notFound(httpResponses.CUSTOMER_NOT_FOUND);
     }
     next();
   } catch {

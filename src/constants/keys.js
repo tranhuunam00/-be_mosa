@@ -1,6 +1,6 @@
-module.exports.SECRET_KEY = process.env.SECRET_KEY;
-module.exports.SESSION_SECRET_KEY = process.env.SESSION_SECRET_KEY;
-module.exports.SECRET_KEY_REFRESH = process.env.SECRET_KEY_REFRESH;
+module.exports.SECRET_KEY = process.env.SECRET_KEY || '123';
+module.exports.SESSION_SECRET_KEY = process.env.SESSION_SECRET_KEY || '123';
+module.exports.SECRET_KEY_REFRESH = process.env.SECRET_KEY_REFRESH || '123';
 
 // Redis Config
 module.exports.REDIS_CONFIG = {
