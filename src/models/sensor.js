@@ -4,10 +4,13 @@ const constants = require('../constants/constants');
 // constants
 
 const sensorSchema = mongoose.Schema({
+  // customer: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: 'customers',
+  //   required: true,
+  // },
   customer: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'customers',
-    required: true,
+    type: String,
   },
   name: {
     type: String,
