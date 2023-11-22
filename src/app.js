@@ -17,6 +17,8 @@ const { createSocketIO } = require('./services/io');
 app.use(cors());
 const socket = require('socket.io');
 require('./helpers/passport');
+require('./config/mqtt/index.mqtt');
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
