@@ -14,4 +14,7 @@ sensorRoute.get('/export/accelerometer_txt', sensorController.exportFileSensorDa
 
 sensorRoute.delete('/all', sensorController.deleteAllData);
 
+sensorRoute.post('/iots', sensorController.iotsCreate);
+
+
 module.exports = sensorRoute;

@@ -1,4 +1,5 @@
 const Sensor = require('../models/sensor');
+const Iot = require("../models/iot")
 
 const createSensors = async (data) => {
   return await Sensor.insertMany(data);
@@ -11,4 +12,8 @@ const deleteAllSensors = async () => {
   return await Sensor.deleteMany();
 };
 
-module.exports = { createSensors, getAllSensors, deleteAllSensors };
+const createIot = async (data) => {
+  return await Iot.create(data)
+}
+
+module.exports = { createSensors, getAllSensors, deleteAllSensors , createIot};

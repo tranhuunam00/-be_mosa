@@ -91,4 +91,15 @@ const deleteAllData = async (req, res) => {
   }
 };
 
-module.exports = { createSensors, exportFileSensorData, deleteAllData, exportFileSensorDataTxt };
+const iotsCreate = async (req, res) => {
+  try {
+    const { humi, temp } = req.body;
+    await sensorService.createIot({ humi, temp });
+    await res.created(httpResponses.SUCCESS);
+  } catch (e) {
+    logger.error(e.message);
+    return res.internalServer(e.message);
+  }
+};
+
+module.exports = { createSensors, exportFileSensorData, deleteAllData, exportFileSensorDataTxt, iotsCreate };
