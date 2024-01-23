@@ -106,33 +106,43 @@ const test = async (req, res) => {
   try {
     const datas = await sensorService.findAndPagi(
       {
-        customer: '113',
+        customer: '120',
       },
-      0,
-      600
+      3600,
+      1200
     );
     let index = 0;
     let random = Math.random() * (Math.random() > 0.5 ? 1 : -1);
-    for (let data of [datas[0]]) {
+    const dataCreate = [];
+    for (let data of datas) {
       // console.log('data', data)
       index = index + 1;
       if (index == 13) {
-        random = Math.random() * (Math.random() > 0.5 ? 1 : -1)
-        index= 0
+        random = Math.random() * (Math.random() > 0.5 ? 1 : -1);
+        index = 0;
       }
       const [x, y, z] = data.value.split('%');
-      const newX = (+x + random).toFixed(3)
-      const newY = (+y + random).toFixed(3)
-      const newZ = (+z + random).toFixed(3)
-      
-      const newValue = newX + "%" + newY + "%" + newZ
+      const newX = (+x + random).toFixed(3);
+      const newY = (+y + random).toFixed(3);
+      const newZ = (+z + random).toFixed(3);
 
-      // await sensorService.createSensors({
+      const newValue = newX + '%' + newY + '%' + newZ;
+      const time = new Date(data.time);
 
-      // });
-      console.log('data', data)
-      console.log(newValue);
+      time.setFullYear(new Date().getFullYear());
+      time.setMonth(new Date().getMonth());
+      time.setDate(new Date().getDate());
+
+      dataCreate.push({
+        name: 'accelerometer',
+        value: newValue,
+        time: new Date(time),
+        customer: '132',
+      });
     }
+
+    await sensorService.createSensors(dataCreate);
+    res.json('ok');
   } catch (e) {
     logger.error(e.message);
     return res.internalServer(e.message);
