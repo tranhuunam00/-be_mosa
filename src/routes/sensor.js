@@ -16,5 +16,8 @@ sensorRoute.delete('/all', sensorController.deleteAllData);
 
 sensorRoute.post('/iots', sensorController.iotsCreate);
 
+sensorRoute.get('/test', sensorController.test);
+
+
 
 module.exports = sensorRoute;

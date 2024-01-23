@@ -102,4 +102,41 @@ const iotsCreate = async (req, res) => {
   }
 };
 
-module.exports = { createSensors, exportFileSensorData, deleteAllData, exportFileSensorDataTxt, iotsCreate };
+const test = async (req, res) => {
+  try {
+    const datas = await sensorService.findAndPagi(
+      {
+        customer: '113',
+      },
+      0,
+      600
+    );
+    let index = 0;
+    let random = Math.random() * (Math.random() > 0.5 ? 1 : -1);
+    for (let data of [datas[0]]) {
+      // console.log('data', data)
+      index = index + 1;
+      if (index == 13) {
+        random = Math.random() * (Math.random() > 0.5 ? 1 : -1)
+        index= 0
+      }
+      const [x, y, z] = data.value.split('%');
+      const newX = (+x + random).toFixed(3)
+      const newY = (+y + random).toFixed(3)
+      const newZ = (+z + random).toFixed(3)
+      
+      const newValue = newX + "%" + newY + "%" + newZ
+
+      // await sensorService.createSensors({
+
+      // });
+      console.log('data', data)
+      console.log(newValue);
+    }
+  } catch (e) {
+    logger.error(e.message);
+    return res.internalServer(e.message);
+  }
+};
+
+module.exports = { createSensors, exportFileSensorData, deleteAllData, exportFileSensorDataTxt, iotsCreate, test };

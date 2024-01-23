@@ -1,5 +1,5 @@
 const Sensor = require('../models/sensor');
-const Iot = require("../models/iot")
+const Iot = require('../models/iot');
 
 const createSensors = async (data) => {
   return await Sensor.insertMany(data);
@@ -13,7 +13,11 @@ const deleteAllSensors = async () => {
 };
 
 const createIot = async (data) => {
-  return await Iot.create(data)
-}
+  return await Iot.create(data);
+};
 
-module.exports = { createSensors, getAllSensors, deleteAllSensors , createIot};
+const findAndPagi = async (filter = {}, offset = 0, limit = 10) => {
+  return await Sensor.find(filter).skip(offset).limit(limit);
+};
+
+module.exports = { createSensors, getAllSensors, deleteAllSensors, createIot, findAndPagi };
